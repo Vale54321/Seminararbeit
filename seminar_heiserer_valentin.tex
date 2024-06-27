@@ -1,0 +1,78 @@
+\documentclass[12pt,oneside,listof=totoc,paper=a4,headings=small]{scrbook}
+% Nützliche Packages für die Gestaltung und allgemeine Konfiguration des Dokuments
+% -----------------------------------
+
+% Allgemeine Formatierungen
+\usepackage[ngerman]{babel}			% neue deutsche Rechtschreibung
+\usepackage[utf8]{inputenc} 		% Umlaute im Text
+\usepackage[T1]{fontenc}
+\usepackage{xspace}                 % Vermeidung von "ineinanderfallenden f's", wie z.B. bei Schifffahrt
+\usepackage{url}		            % korrekte Anzeige/Umbruch von URLs
+\usepackage{listings}               % z.B. nützlich zum Einbinden von Quellcode
+\usepackage{hyperref} 				% für Hyperlinks in PDF-Dokumenten 
+\usepackage{lmodern}
+\usepackage{enumerate}
+\usepackage{csquotes}
+
+% Kopfzeile
+\usepackage[headsepline,manualmark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ohead{\pagemark}
+\ihead{\headmark}
+\automark{chapter}
+\pagestyle{scrheadings}
+
+% Seitenspiegel
+\usepackage[left=25mm,right=20mm,top=25mm,bottom=25mm]{geometry}
+
+% Literatur
+\usepackage[backend=biber, %% Hilfsprogramm "biber" (statt "biblatex" oder "bibtex")
+            style=numeric, %% Zitierstil (siehe Dokumentation, bitte mit Betreuer absprechen)
+            natbib=true, %% Bereitstellen von natbib-kompatiblen Zitierkommandos
+            hyperref=true, %% hyperref-Paket verwenden, um Links zu erstellen
+]{biblatex}
+
+% Einbindung der Literatur-Datenbank
+\addbibresource{./Literatur/quellen.bib}
+
+% Grafiken
+\usepackage{graphicx} 				% Grafiken einfügen (pdf,png - aber jpg vermeiden)
+\graphicspath{{./Bilder/}}          % Pfad zu den Bildern
+
+% Tabellen
+\usepackage{booktabs} 				% bessere Gestaltung von Tabellen
+\usepackage{longtable} 				% für bessere Tabellen über mehrere Seiten
+
+% Koma-Script Kompatibilität
+\usepackage{scrhack}
+
+
+
+% Das Dokument selbst mit seinen Bestandteilen
+% --------------------------------------------
+\begin{document}
+\frontmatter 
+    \include{./Bestandteile/titel} 				    % Titelblatt
+%    \include{./Bestandteile/sperrvermerk} 			% Sperrvermerk (nur falls von Firma verlangt)
+    \include{./Bestandteile/kurzzusammenfassung}  	% Abstract
+    \tableofcontents 					            % Inhaltsverzeichnis
+    \clearpage
+    \listoffigures  					 	        % Abbildungsverzeichnis
+    \clearpage
+    \listoftables						            % Tabellenverzeichnis 
+    \clearpage
+% ----------------------------------------------
+\mainmatter 						% die einzelnen Kapitel, bei Bedarf weitere *.tex Dateien erzeugen und hier einbinden
+    \input{./Bestandteile/main}
+% ----------------------------------------------
+\backmatter 
+
+\printbibliography
+
+\input{./Bestandteile/erklaerung} 	% Erklärungen - Unterschreiben nicht vergessen!
+
+\end{document}
+
+% Vorlage erstellt von Alexander Bartel (alexander.bartel@hs-kempten.de), Fakultät Informatik, Hochschule Kempten (c) CC BY 4.0
+% ergänzt durch: Prof. Dr. Rieck (stefan.rieck@hs-kempten.de)
+% 20230329 SR umgestellt auf biblatex und biber
