@@ -1,0 +1,131 @@
+\chapter{Arten, wie Code Verhalten spiegelt}
+Im nächsten Teil wird beleuchtet, wie Verhalten im Code abgebildet werden kann. Dabei gibt es grundlegend drei verschiedene Arten. Diese werden im folgenden anhand eines einfachen Beispiels erläutert. Des Weiteren soll auf die Erzeugung von Endlosschleifen eingegangen werden, wie Clausen feststellt, einen Sonderfall darstellen. \cite{fiveLines.2023}
+\begin{tcolorbox}[colback=gray!20!white, colframe=gray!75!black, title=Beispielverhalten]
+    Es soll bis zu einer bestimmten ganzen Zahl abwechselnd „gerade“ und „ungerade“ in der Konsole ausgegeben werden. „0“ wird hierbei als gerade angesehen.\\
+    Dieses Verhalten ist am von Clausen genutzten Beispiel (FizzBuzz) nachempfunden und so weit wie möglich vereinfacht, um weiterhin alle nötigen Besonderheiten zu veranschaulichen.\cite{fiveLines.2023}
+\end{tcolorbox}
+
+\section{Verhalten im Kontrollfluss}
+Die erste und wohl einfachste Möglichkeit, Verhalten im Code abzubilden, ist der Kontrollfluss. Dieser zeichnet sich durch die Verwendung von Kontrolloperatoren, Methodenaufrufen und der Zeilenabfolge aus. \cite{fiveLines.2023}
+In folgender Abbildung kann man bla sehen (\ref{fig:Kontrollfluss})
+\begin{figure}[ht]
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+const i = 0;
+while (i < 5) {
+    foo(i);
+    i++;
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Kontrolloperatoren}
+        \label{fig:Kontrolloperatoren}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+function loop(i: number) {
+    if (i < 5) {
+        foo(i);
+        loop(i + 1);
+    }
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Methodenaufrufe}
+        \label{fig:Methodenaufrufe}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+foo(0);
+foo(1);
+foo(2);
+foo(3);
+foo(4);
+            \end{minted}
+        \end{minipage}
+        \caption{Zeilenabfolge}
+        \label{fig:Zeilenabfolge}
+    \end{subfigure}
+    \caption{Beispiele für Code im Kontrollfluss \cite{fiveLines.2023}}
+    \label{fig:Kontrollfluss}
+\end{figure}
+
+Der Unterschied dieser Unterkategorien wird bei der Betrachtung des Aufrufs „foo(i)“ und dessen Werthereingabe deutlich. Bei \ref{fig:Kontrolloperatoren} wird mithilfe des „while“ Operators die Funktion aufgerufen und die Eingabe erhöht.\\ Das mittlere Beispiel zeigt die Verwendung einer rekursiven Methode, um das Verhalten darzustellen. Der Eingabeparameter dient hier als Wert für den Funktionsaufruf.\\ Das letzte Beispiel \ref{fig:Zeilenabfolge} zeigt das gleiche Verhalten durch einfache Aufrufe. Hier wird die Funktion mit Wert im Klartext aufgerufen.
+
+\subsection{Eigenes Beispiel}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function istGerade(n: number) {
+    for(let i = 0; i <= n; i++) {
+        if(i % 2 == 0) {
+            console.log("Gerade");
+        } else {
+            console.log("Ungerade");
+        }
+    }
+}
+        \end{minted}
+    \caption{Beispiel im Kontrollfluss}
+    \label{fig:KontrollflussIstGerade}
+\end{figure}
+\section{Verhalten in der Struktur der Daten}
+\subsection{Eigenes Beispiel}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+interface Zahl{
+    istGerade(): void;
+}
+
+class GeradeZahl implements Zahl{
+    constructor(private count: number) {}
+    istGerade() {
+        console.log("Gerade");
+        if(this.count != 0) {
+            new UngeradeZahl(this.count - 1).istGerade();
+        }
+    }
+}
+
+class UngeradeZahl implements Zahl{
+    constructor(private count: number) {}
+    istGerade() {
+        console.log("Ungerade");
+        if(this.count != 0) {
+            new GeradeZahl(this.count - 1).istGerade();
+        }
+    }
+}
+        \end{minted}
+    \caption{Beispiel in einer Datenstruktur}
+    \label{fig:KontrollflussIstGerade}
+\end{figure}
+
+\section{Verhalten in den Daten}
+\subsection{Eigenes Beispiel}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+const daten: (() => void)[] = [
+    () => console.log("Gerade"),
+    () => console.log("Ungerade")
+];
+
+function istGerade(n: number) {
+    for(let i = 0; i <= n; i++) {
+        daten[i % daten.length]();
+    }
+}
+        \end{minted}
+    \caption{Beispiel in einer Datenstruktur}
+    \label{fig:KontrollflussIstGerade}
+\end{figure}

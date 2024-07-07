@@ -1,0 +1,30 @@
+\chapter{Strukturen in der Softwareentwicklung}
+Bevor man sich mit den Strukturen in der Softwareentwicklung auseinandersetzen kann, ist es wichtig, sich erneut vor Augen zu führen, was Software eigentlich ist.\\
+"\emph{Software modelliert einen Teil der Welt. Die Welt - und unser Verständnis davon - entwickelt sich, und unsere Software muss sich entwickeln, um ein akkurates Modell zu sein.}" \cite{fiveLines.2023}\\
+Das heißt also, dass Code verschiedenste Gegebenheiten aus der Realität abbildet. Darunter zählen Informationen, Zusammenhänge und ganze Abläufe. Zusammen ergibt sich dadurch eine Struktur, ein wiedererkennbares Muster, welches sich sowohl in der echten Welt als auch in der Software finden lässt. 
+\section{Verschiedene Arten von Strukturen}
+
+Es gibt verschiedene Bereiche in der Softwareentwicklung, in denen Struktur eine Rolle spielt. Es ist möglich diese Bereiche an zwei Achsen einzuteilen. Zum einen gibt es einige Faktoren welche den Menschen, also die Softwareentwickler betreffen. Auf der anderen Seite befindet sich der tatsächliche Code. Um die Einteilung sinnvoll zu gestalten, teilt die andere Achsen anhand des Wirkungsbereiches der Strukturen ein. \cite{fiveLines.2023}
+Die folgende Tabelle zeigt das Ergebnis der Einteilung.
+
+
+\begin{table} [ht]
+	\centering
+	\begin{tblr}{
+		vline{2} = {-}{},
+		hline{2} = {-}{},
+	}
+			& Teamintern           & Teamübergreifend           \\
+	Code     & Daten und Funktionen & externe APIs               \\
+	Menschen & Hierarchie, Prozesse & Verhalten, Domänenexperten 
+	\end{tblr}
+	\caption{Strukturkategorien \cite{fiveLines.2023} (korrigierte Form)}
+	\label{tab:Auswertungskategorien}
+\end{table}
+
+
+Melvin E. Conway stellt bereits 1968 Beobachtungen an, dass es eine gewisse Symmetrie zwischen der Arbeitsweise von Entwicklerteams und den Zusammenhängen der tatsächlichen Systemen gibt. \cite{conway.1968}
+Diese Aussage wurde von Harvard Wissenschaftlern bestätigt. \cite{maccormack.2012}
+\section{Weitere Einschränkungen}
+
+Auch das Nutzerverhalten kann bestimmte Strukturen vorgeben, da diese ein immer gleiches Verhalten erwarten. Auch wenn einige Abläufe optimiert oder umstrukturiert werden können, ist es nicht immer sinnvoll dies zu tun, da dann ggf. Nutzer neu geschult werden müssen.\cite{fiveLines.2023}
