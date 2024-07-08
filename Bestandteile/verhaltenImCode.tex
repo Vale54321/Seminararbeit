@@ -7,7 +7,7 @@ Im nächsten Teil wird beleuchtet, wie Verhalten im Code abgebildet werden kann.
 
 \section{Verhalten im Kontrollfluss}
 Die erste und wohl einfachste Möglichkeit, Verhalten im Code abzubilden, ist der Kontrollfluss. Dieser zeichnet sich durch die Verwendung von Kontrolloperatoren, Methodenaufrufen und der Zeilenabfolge aus. \cite{fiveLines.2023}
-In folgender Abbildung kann man bla sehen (\ref{fig:Kontrollfluss})
+In folgender Abbildung werden dafür jeweils einfache Beispiele gezeigt. (\ref{fig:Kontrollfluss})
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.30\textwidth}
         \centering
@@ -61,7 +61,8 @@ foo(4);
 Der Unterschied dieser Unterkategorien wird bei der Betrachtung des Aufrufs „foo(i)“ und dessen Werthereingabe deutlich. Bei \ref{fig:Kontrolloperatoren} wird mithilfe des „while“ Operators die Funktion aufgerufen und die Eingabe erhöht.\\ Das mittlere Beispiel zeigt die Verwendung einer rekursiven Methode, um das Verhalten darzustellen. Der Eingabeparameter dient hier als Wert für den Funktionsaufruf.\\ Das letzte Beispiel \ref{fig:Zeilenabfolge} zeigt das gleiche Verhalten durch einfache Aufrufe. Hier wird die Funktion mit Wert im Klartext aufgerufen.
 
 \subsection{Eigenes Beispiel}
-\begin{figure}[ht]
+Folgende Abbildung zeigt das Beispiel-Verhalten im Kontrollfluss.
+\begin{figure}[h]
     \centering
         \begin{minted}{typescript}
 function istGerade(n: number) {
@@ -76,7 +77,10 @@ function istGerade(n: number) {
         \end{minted}
     \caption{Beispiel im Kontrollfluss}
     \label{fig:KontrollflussIstGerade}
-\end{figure}
+\end{figure}\\
+Um die Unterschiede der verschiedenen Darstellungsformen zu erkennen, ist es sinnvoll die Aufrufe von \textit{„console.log()“} zu betrachten. Diese stellen bei unserem Beispiel die tatsächlich durchzuführende Aktion dar. In Abbildung \ref{fig:KontrollflussIstGerade} lässt sich erkennen, dass diese Aufrufe durch die Kontrolloperatoren \textit{for} und \textit{if} gesteuert werden.
+\subsection{Vor und Nachteile}
+Da das Programmieren im Kontrollfluss schnell und einfach funktioniert, eignet sich diese Art gut, um neues Vehalten initial abzubilden. 
 \section{Verhalten in der Struktur der Daten}
 \subsection{Eigenes Beispiel}
 \begin{figure}[ht]
