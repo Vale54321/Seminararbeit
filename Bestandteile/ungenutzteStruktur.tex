@@ -1,0 +1,153 @@
+\chapter{Ungenutzte Strukturen im Code}
+Im letzten Kapitel sollen einige Spezialfälle untersucht werden, bei denen oft aus verschiedenen Gründen auf ein Refactoring Verzichtet wird.
+Gründe dafür können unter anderem Zeitmangel, fehlende Erfahrung oder gar Faulheit der Entwickler sein.
+
+\section{Leerzeilen nutzen}
+Wenn im Code Leerzeilen verwendet werden, hat dies zumeist einen Grund. 
+Programmierende grenzen dadurch Gruppierungen von Aufrufen, Variablen oder generell zusammengehörigen Codeteilen voneinander ab.
+Da Leerzeilen in kürzester Zeit eingefügt werden können und einen großen Effekt zur Lesbarkeit des Codes beitragen, werden diese fast immer benutzt.
+Dies ist auch ein Grund dafür, dass viele kleinere Refactorings nicht durchgeführt werden, da diese mehr Zeit in anspruch nehmen würden. \citep[S. 325]{fiveLines.2023}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function login(username: string, password: string) {
+    if (username !== "admin" || password !== "123") {
+        throw new Error("Invalid credentials");
+    }
+    const loginUser = getUser(username)
+
+    userHistroy.push(loginUser);
+    currentUser = loginUser;
+}
+        \end{minted}
+    \caption{Loginmethode mit einer Leerzeile}
+    \label{fig:LoginLeerzeile}
+\end{figure}\\
+Das Codebeispiel \ref{fig:LoginLeerzeile} zeigt eine stark vereinfachte Methode, um einen Login durchzuführen.
+In Zeile Nr. 6 wird die Überprüfung der Anmeldedaten und die annschließende Anfrage des Nutzers, von den weiteren Bestandteilen des Logins räumlich voneinander getrennt.
+Das durchzuführende Refactoring wirkt in diesem Fall fast trivial.
+Die beiden Bestandteile vor und nach der Leerzeile können nach \citep[S. 325]{fiveLines.2023} in eigene Methoden gezogen werden.
+Jediglich passende Funktions Namen müssen gewählt werden.
+Das folgende Ergebnis \ref{fig:LoginErgebnis} entsteht dadurch.
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function updateCurrentUser(loginUser: String) {
+    userHistory.push(loginUser)
+    currentUser = loginUser;
+}
+
+function authenticateUser(username: String, password: string) {
+    if (username !== "admin" || password !== "123") {
+        throw new Error("Invalid credentials");
+    }
+    return getUser(username);
+}
+
+function login(username: string, password: string) {
+    const loginUser = authenticateUser(username, password);
+    updateCurrentUser(loginUser);
+}
+        \end{minted}
+    \caption{Loginmethode mit extrahierten Untermethoden}
+    \label{fig:LoginErgebnis}
+\end{figure}
+\newpage
+Eine weiterer Punkt, an dem oft auf Leerzeilen zurückgegriffen wird, ist das Erstellen von Klassen.
+Dort werden oft zusammengehörende Felder gruppiert.
+Das folgende Codebeispiel \ref{fig:LeerzeileFelder} zeigt den Anfang einer Klasse für eine Nutzer Authentifizierung. 
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+class Authentication{
+    private username: string;
+    private password: string;
+
+    private timestamp: Date;
+    //..
+}
+        \end{minted}
+    \caption{Authentication Klasse mit einer Leerzeile}
+    \label{fig:LeerzeileFelder}
+\end{figure}\\
+Hier kann an der 4. Zeile eine klare Einteilung zwischen den tatsächlichen Nutzerinformationen und weiteren zur Authentifizierung gehörenden Metadaten erkannt werden.
+Auch in diesem Fall ist das nach \citep[S. 326]{fiveLines.2023} durchzuführende Refactoring selbsterklärend.
+Der folgende Codeausschnitt \ref{fig:LeerzeileFelderErgebnis} zeigt ein mögliches Ergebnis.
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+class UserCredentials{
+    private username: string;
+    private password: string;
+}
+
+class Authentication{
+    private timestamp: Date;
+    //..
+}
+        \end{minted}
+    \caption{Loginmethode mit einer Leerzeile}
+    \label{fig:LeerzeileFelderErgebnis}
+\end{figure}\\
+\newpage
+\section{Doppelten Code zusammenführen}
+Es gibt immer wieder Situationen, in den zwei Methoden oder Klassen nahezu identisch sind, es aber trotzdem einen kleinen Unterschied gibt.
+In solchen Fällen wird oft auf das Refactoring verzichtet, da der Aufwand zu groß erscheint oder die Entwickler im Programmierfluss keine einfache Lösung finden den Code zusammenzuführen.\citep[S. 326 f.]{fiveLines.2023}\\
+Das folgende Beispiel zeigt zwei Klassen, die jeweils einen Fromatierer umsetzen.
+\begin{figure}[ht]
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+class XMLFormatter {
+    format(vals: string[]) {
+        let result = "";
+        for (let i = 0;
+              i < vals.length; i++) {
+            result +=
+              `<value>${vals[i]}</value>`;
+        }
+        return result;
+    }
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Klasse eines XML-Formattierers}
+        \label{fig:XmlAnfang}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+class JSONFormatter {
+    format(vals: string[]) {
+        let result = "";
+        for (let i = 0;
+              i < vals.length; i++) {
+            if (i > 0) result += ",";
+            result +=
+                `{ value: "${vals[i]}" }`;
+        }
+        return result;
+    }
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Klasse eines JSON-Formattierers}
+        \label{fig:JsonAnfang}
+    \end{subfigure}
+    \caption{Ähnliche Formattierer Klassen \citep[S. 327]{fiveLines.2023}}
+    \label{fig:FormatterAnfang}
+\end{figure}\\
+Vergleicht man die beiden Klassen \ref{fig:XmlAnfang} und \ref{fig:JsonAnfang}, fällt auf dass diese nahezu identisch sind.
+Ein Unterschied ist zum Einen die abweichende Formatierung jedes einzelnen Wertes.
+Bei XML wird der Wert in ein Tag eingebettet, bei JSON wird ein Objekt mit einem Schlüssel-Wert-Paar in geschweiften Klammern erstellt.
+Dieser Unterschied liese sich einfach vereinen lassen, da dort nur unterschiedliche Zeichenketten eingefügt werden müssen.
+Die ausschlaggebende Problematik stellt, in diesem Beispiel, das trennende Komma zwischen einzelnen Werten im JSON Format dar.
+Dies verhindert eine einfache Zusammenführung der beiden Klassen.
+Im folgenden wird ein möglicher Lösungsansatz gezeigt, solche Probleme trotzdem zu lösen.
+blabla
+
+\section{Gemeinsame Affixe nutzen}
+\section{Den Laufzeittyp bearbeiten}
