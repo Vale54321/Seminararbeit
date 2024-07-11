@@ -1,0 +1,30 @@
+\chapter{Wann ist Refactoring sinnvoll?}
+Im ersten Moment hört es sich so an, als wäre Refactoring in jedem Fall ein Weg, Qualität, Nutzbarkeit und Wartbarkeit von Software zu verbessern.
+Jedoch gibt es Situationen, in denen Refactoring keine Verbesserung liefert. Im Gegenteil, es kann sogar zu einer Verschlechterung führen \citep[S. 321 f.]{fiveLines.2023}.
+Diese Fälle sollen im folgenden Kapitel beleuchtet werden.\\
+\begin{singlespace}
+\textit{„Durch Refactorings machen wir manche Änderungen leichter und manche schwieriger. Wir führen Refactorings durch, um Änderungen in eine Richtung zu unterstützen, von der wir glauben, dass sich die Software in diese entwickelt. Je mehr Code wir haben, desto sicherer können wir uns über die Richtung und die typische Art der Änderung sein [...]“}\citep[S. 321]{fiveLines.2023}\\
+\end{singlespace}
+\par
+Gerade bei neu entwickelten Codeteilen ist die Struktur oft noch nicht vollständig ausgereift.
+Hier ist die oberste Priorität, erst die Korrektheit und Vollständigkeit sicherzustellen.
+Ist dies nicht der Fall ist es für Entwickler wertvoll, schnell Änderungen vornehmen zu können und verschiedene Ansätze auszuprobieren.
+Refactoring würde in diesem Fall die Entwicklung verlangsamen und ist daher nicht sinnvoll \citep[S. 321]{fiveLines.2023}.\\
+Trotzdem ist es wichtig durch dieses Vorgehen die Struktur des umliegenden Codes nicht zu vernachlässigen.
+Bezieht sich die Unsicherheit nur auf einen Teilbereich, sollte dieser vom Rest gekapselt werden, um andere Refactorings nicht zu behindern \citep[S. 321]{fiveLines.2023}.\\
+\par
+Auch bei bestehenden Code, oder Code mit genug Sicherheit die Struktur zu festigen, sollte nicht sofort jedes mögliche Refactoring durchgeführt werden, auch wenn es noch so offensichtlich wirkt.\\
+\begin{singlespace}
+\textit{„Versuchen wir, die Entwicklungsrichtung vorherzusagen, können wir der Codebasis langfristig mehr schaden als nutzen. Wie bei den meisten Dingen in unserer Arbeit sollten wir uns nicht auf Vermutungen stützen, sondern auf empirisch erhobene Daten.“}\citep[S. 322]{fiveLines.2023}\\
+\end{singlespace}
+\par
+Es ist also wichtig Refactoring nur an den Stellen durchzuführen, an denen es bereits Änderungen, in eine bestimmte Richtung, vorgekommen sind.
+Wenn es keine Anzeichen gibt, dass geplante Änderungen in Zukunft gebraucht werden, wäre er zum einen Zeitverschwendung, zum anderen erhöt es die Komplexität, ohne Nutzen davon zu erhalten \citep[S. 322]{fiveLines.2023}.\\
+Auch wenn Code eine sehr schlechte Qualität aufweist, ist es nicht sinnvoll diesen zu Refacotren, solange keine Änderungen nötig sind. 
+Ist er so gesehen als externe API nutzbar und funktioniert, bringt es keinen Vorteil diesen zu verbessern \citep[S. 89]{refactoring.2020}.\\
+\begin{singlespace}
+    \textit{„Darüber hinaus gibt es noch den Fall, dass es einfacher ist, den Code neu zu schreiben, als ein Refactoring vorzunehmen. Das ist allerdings eine schwierige Entscheidung.“}\citep[S. 90]{refactoring.2020}\\
+\end{singlespace}
+\par
+Auch hier sollte auf Grundlage von Erfahrung und Beobachtung gehandelt werden.
+Es sollte eindeutige Hinweise geben, dass eine Neuentwicklung auf lange sicht mehr Zeit spart und Verbesserungen liefert, als diesen Teil umfassend zu refactoren \citep[S. 90]{refactoring.2020}.

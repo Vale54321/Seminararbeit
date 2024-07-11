@@ -1,13 +1,16 @@
-\chapter{Arten, wie Code Verhalten spiegelt}
-Im nächsten Teil wird beleuchtet, wie Verhalten im Code abgebildet werden kann. Dabei gibt es grundlegend drei verschiedene Arten. Diese werden im folgenden anhand eines einfachen Beispiels erläutert. Des Weiteren soll auf die Erzeugung von Endlosschleifen eingegangen werden, wie Clausen feststellt, einen Sonderfall darstellen. \cite{fiveLines.2023}
-\begin{tcolorbox}[colback=gray!20!white, colframe=gray!75!black, title=Beispielverhalten]
+\chapter{Wie kann Verhalten im Code abgebildet werden?}
+Im nächsten Teil wird beleuchtet, wie Verhalten im Code abgebildet werden kann. Dabei gibt es grundlegend drei verschiedene Arten. 
+Diese werden im Folgenden anhand eines einfachen Beispiels erläutert. 
+Des Weiteren soll auf die Erzeugung von Endlosschleifen eingegangen werden, wie Clausen feststellt, stellt dies einen Sonderfall dar.
+Viele Refactorings transformieren Code zwischen diesen Darstellungsformen \citep[S. 313]{fiveLines.2023}.
+\begin{tcolorbox}[colback=gray!20!white, colframe=gray!75!black, title=Beispiel-Verhalten]
     Es soll bis zu einer bestimmten ganzen Zahl abwechselnd „gerade“ und „ungerade“ in der Konsole ausgegeben werden. „0“ wird hierbei als gerade angesehen.\\
     Dieses Verhalten ist am von Clausen genutzten Beispiel (FizzBuzz) nachempfunden und so weit wie möglich vereinfacht, um weiterhin alle nötigen Besonderheiten zu veranschaulichen.\cite{fiveLines.2023}
 \end{tcolorbox}
 
 \section{Verhalten im Kontrollfluss}
-Die erste und wohl einfachste Möglichkeit, Verhalten im Code abzubilden, ist der Kontrollfluss. Dieser zeichnet sich durch die Verwendung von Kontrolloperatoren, Methodenaufrufen und der Zeilenabfolge aus. \cite{fiveLines.2023}
-In folgender Abbildung werden dafür jeweils einfache Beispiele gezeigt. (\ref{fig:Kontrollfluss})
+Die erste und wohl einfachste Möglichkeit, Verhalten im Code abzubilden, ist der Kontrollfluss. Dieser zeichnet sich durch die Verwendung von Kontrolloperatoren, Methodenaufrufen und der Zeilenabfolge aus. \citep[S. 313 f.]{fiveLines.2023}
+In folgender Abbildung \ref{fig:Kontrollfluss} werden dafür jeweils einfache Beispiele gezeigt.
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.30\textwidth}
         \centering
@@ -60,8 +63,8 @@ foo(4);
 
 Der Unterschied dieser Unterkategorien wird bei der Betrachtung des Aufrufs „foo(i)“ und dessen Werthereingabe deutlich. Bei \ref{fig:Kontrolloperatoren} wird mithilfe des „while“ Operators die Funktion aufgerufen und die Eingabe erhöht.\\ Das mittlere Beispiel zeigt die Verwendung einer rekursiven Methode, um das Verhalten darzustellen. Der Eingabeparameter dient hier als Wert für den Funktionsaufruf.\\ Das letzte Beispiel \ref{fig:Zeilenabfolge} zeigt das gleiche Verhalten durch einfache Aufrufe. Hier wird die Funktion mit Wert im Klartext aufgerufen.
 
-\subsection{Eigenes Beispiel}
-Folgende Abbildung zeigt das Beispiel-Verhalten im Kontrollfluss.
+\subsubsection{Eigenes Beispiel}
+Der folgende Codeausschnitt \ref{fig:KontrollflussIstGerade} zeigt das vorher beschriebene Beispiel im Kontrollfluss. 
 \begin{figure}[h]
     \centering
         \begin{minted}{typescript}
@@ -78,11 +81,59 @@ function istGerade(n: number) {
     \caption{Beispiel im Kontrollfluss}
     \label{fig:KontrollflussIstGerade}
 \end{figure}\\
-Um die Unterschiede der verschiedenen Darstellungsformen zu erkennen, ist es sinnvoll die Aufrufe von \textit{„console.log()“} zu betrachten. Diese stellen bei unserem Beispiel die tatsächlich durchzuführende Aktion dar. In Abbildung \ref{fig:KontrollflussIstGerade} lässt sich erkennen, dass diese Aufrufe durch die Kontrolloperatoren \textit{for} und \textit{if} gesteuert werden.
-\subsection{Vor und Nachteile}
-Da das Programmieren im Kontrollfluss schnell und einfach funktioniert, eignet sich diese Art gut, um neues Vehalten initial abzubilden. 
+Um die Unterschiede der verschiedenen Darstellungsformen zu erkennen, ist es sinnvoll die Aufrufe von \textit{„console.log()“} zu betrachten.
+Diese stellen bei unserem Beispiel die tatsächlich durchzuführende Aktion dar.
+In Abbildung \ref{fig:KontrollflussIstGerade} lässt sich erkennen, dass diese Aufrufe durch die Kontrolloperatoren \textit{for} und \textit{if} gesteuert werden.
+Dies stellt ein klassisches Beispiel für das Verhalten im Kontrollfluss dar.
+\subsubsection{Endlosschleife}
+Im Kontrollfluss gibt es mehrere Möglichkeiten, eine Endlosschleife zu erzeugen.
+Da sie am weitesten verbreitet sind, sollten sie unter allen Programmierenden bekannt sein.
+\begin{figure}[ht]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+for (;;){}
+
+while (true) {}
+            \end{minted}
+        \end{minipage}
+        \caption{Endlosschleife mit Kontrolloperatoren}
+        \label{fig:endloss1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+function loop() {
+    loop();
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Endlosschleife mit rekursiver Methode}
+        \label{fig:endloss2}
+    \end{subfigure}
+    \caption{Endlosschleifen im Kontrollfluss \citep[S. 314]{fiveLines.2023}}
+    \label{fig:Endlossschleifen1}
+\end{figure}\\
+Die einzige Besonderheit stellt das \textit{„for(;;)“} dar, da es durch eine leere Bedingung niemals terminiert.
+\subsubsection{Vor und Nachteile}
+Da das Programmieren im Kontrollfluss schnell und einfach funktioniert, eignet sich diese Art gut, um neues Verhalten initial abzubilden.
+Umfassende Änderungen sind sofort möglich, da zum Beispiel einfach die Reihenfolge der Aufrufe geändert werden kann und somit sofort ein anderes Verhalten entsteht.
+Dieser Punkt ist aber nicht zwingend als Vorteil zu sehen, da wir in der Softwareentwicklung Stabilität und gute Wartbarkeit bevorzugen \citep[S. 313 f.]{fiveLines.2023}. 
+
 \section{Verhalten in der Struktur der Daten}
-\subsection{Eigenes Beispiel}
+Die Zweite Möglichkeit Verhalten im Code abzubilden, sind Datenstrukturen.
+Diese zeichnen sich durch die Verwendung von objektorientierter Programmierung aus.
+Also durch Klassen, Interfaces, Vererbung, etc. \citep[S. 315 f.]{fiveLines.2023}\\
+Eines der bekanntesten Beispiele für die Verwendung von Datenstrukturen ist die \textit{„binäre Suche“}.
+Diese setzt einen sortierten Binärbaum voraus, um zu funktionieren.
+Suchen wir nun nach einem Wert, wird dieser mit dem der Wurzel verglichen und je nach Ergebnis rekursiv in den linken oder rechten Teilbaum abgestiegen.
+Das Verhalten wird also maßgeblich durch die Struktur des Baumes bestimmt \citep[S. 315 f.]{fiveLines.2023}.
+
+\subsubsection{Eigenes Beispiel}
+Das folgende Beispiel \ref{fig:DatenstrukturIstGerade} zeigt das vorher beschriebene Beispiel in einer Datenstruktur.
 \begin{figure}[ht]
     \centering
         \begin{minted}{typescript}
@@ -111,11 +162,46 @@ class UngeradeZahl implements Zahl{
 }
         \end{minted}
     \caption{Beispiel in einer Datenstruktur}
-    \label{fig:KontrollflussIstGerade}
-\end{figure}
+    \label{fig:DatenstrukturIstGerade}
+\end{figure}\\
+Um das Verhalten abzubilden, wird auf den Ansatz einer einfach verketteten Liste gesetzt.
+Es wird ein Interface \textit{„Zahl“} verwendet, welches die Methode \textit{„istGerade()“} vorschreibt.
+Jede der beiden Klassen \textit{„GeradeZahl“} und \textit{„UngeradeZahl“} implementiert dieses Interface und ruft die Methode der jeweils anderen Klasse auf, solange der Zähler nicht bei 0 angelangt ist.
+\subsubsection{Endlosschleife}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+class Rec {
+    constructor(public readonly f:(_: Rec) => void) {}
+}
 
+function loop() {
+    let helper = (r: Rec) => r.f(r);
+    helper(new Rec(helper));
+}
+        \end{minted}
+    \caption{Endlossschleife in einer Datenstruktur \citep[S. 316]{fiveLines.2023}}
+    \label{fig:DatenstrukturEndlossschleife}
+\end{figure}
+Der Codeausschnitt \ref{fig:DatenstrukturEndlossschleife} zeigt eine Endlossschleife in einer Datenstruktur.
+Dieses Beispiel ist nicht so einfach zu verstehen, da es sich um eine Klasse handelt, die im Konstruktor eine Methode erwartet, die wiederum die selbe Klasse als Parameter erwartet.
+In der Funktion \textit{„loop()“} wird auf einer Hilfsvariablen eine solche Methode erstellt.
+Im Inhalt dieser Methode wird auf dem hereingegebenen Objekt die gleiche Methode erneut aufgerufen.
+Somit ist das Verhalten nun ähnlich zu einem normalen rekursiven Funktionsaufruf, nur dass hier die Klasse als Parameter übergeben wird.
+Um die Endlosschleife zu starten, muss die eben erstellte Methode mit einem neuen Objekt der Klasse \textit{„Rec“} aufgerufen werden.
+Da dieser Ansatz nur schwer zu verstehen ist und vor allem schwer zu lesen ist, sollte er nur in Ausnahmefällen verwendet werden \citep[S. 316]{fiveLines.2023}.
+\subsubsection{Vor und Nachteile}
+Das Verhalten in Datenstrukturen umzusetzen, hat mehrere positive Effekte.
+Zum einen erreichen wir durch den objektorientierten Ansatz typensicherheit, was den Code lesbarer und wartbarer macht.
+Der vorher erwähnte Wunsch nach Stabilität und der Möglichkeit nur kleinere Anpassungen vorzunehmen, wird ebenfalls erfüllt.
+Auch in der Performance kann es zu einer Verbesserung kommen, da die Datenstrukturen teilweise im Cache abgespeichert werden können.
+Allerdings ist der Aufwand, um Verhalten in Datenstrukturen abzubilden, höher als im Kontrollfluss \citep[S.315 ff.]{fiveLines.2023}.
+\newpage
 \section{Verhalten in den Daten}
-\subsection{Eigenes Beispiel}
+Das Verhalten in den tatsächlichen Daten zu kodieren, ist die letzte Möglichkeit, die Clausen in seinem Buch beschreibt.
+Diese zeichnet sich vor allem durch die Nutzung von Funktionen und Lambdas, die in Arrays gespeichert werden \citep[S. 319 f.]{fiveLines.2023}.
+
+\subsubsection{Eigenes Beispiel}
 \begin{figure}[ht]
     \centering
         \begin{minted}{typescript}
@@ -130,6 +216,36 @@ function istGerade(n: number) {
     }
 }
         \end{minted}
-    \caption{Beispiel in einer Datenstruktur}
-    \label{fig:KontrollflussIstGerade}
+    \caption{Beispiel in den Daten selbst}
+    \label{fig:DatenIstGerade}
 \end{figure}
+Die Umsetzung des Beispielverhaltens in den Daten selbst ist in Abbildung \ref{fig:DatenIstGerade} zu sehen.
+Hier sind die \textit{„console.log()“}-Aufrufe in einem Array gespeichert. 
+Über dieses Array wird in der Funktion \textit{„istGerade()“} iteriert und die Funktionen darin aufgerufen.
+Die Besonderheit hierbei ist, dass der Modulo-Operator nicht mit einer festen Zahl, sondern mit der Länge des Arrays verwendet wird.
+Dadurch wird noch deutlicher, dass das Verhalten in den Daten abgebildet wird.
+\subsubsection{Endlosschleife}
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function loop() {
+    let a = [() => { }];
+    a[0] = () => a[0]();
+    a[0]();
+}
+        \end{minted}
+    \caption{Endlossschleife in Daten abgebildet \citep[S. 319]{fiveLines.2023}}
+    \label{fig:DatenEndloss}
+\end{figure}
+Die Endlosschleife ist in diesem Fall weider einfacher zu verstehen.
+Es wird ein Array erstellt, welches Funktionen enthält.
+Anschließend wird auf dem ersten Feld eine Funktion gespeichert, die dann wieder das erste Feld des Arrays aufruft.
+Auch hier ist es im Endeffekt eine rekursive Funktion, die aber durch das Array abgebildet wird.
+Um die Schleife zu starten, wird die Funktion im ersten Feld des Arrays aufgerufen \citep[S. 319]{fiveLines.2023}.
+\newpage
+\subsubsection{Vor und Nachteile}
+Der einzige Vorteil, den Clausen in seinem Buch nennt ist die in manchen Fällen beste Performance, im Vergleich zu den anderen beiden Darstellungsformen.
+Jedoch muss man einige negative Aspekt in Kauf nehmen. Durch diese Art der Programmierung erhält man nur eine schlechte Unterstützung durch den Compiler.
+Es gibt keine Erkennung ob ein gültiges Feld aus dem Array aufgerufen wird oder ob die Funktionen im Array überhaupt die selben Parameter erwarten.
+Außerdem kann es schnell zu Konmsitentzproblemen kommen, wenn die gespeicherten Daten veränderbar sind.
+Diese Form der Darstellung sollte also nur in Ausnahmefällen verwendet werden, in denen die Performance eine große Rolle spielt und die anderen Nachteile in Kauf genommen werden können \citep[S. 319 f.]{fiveLines.2023}.

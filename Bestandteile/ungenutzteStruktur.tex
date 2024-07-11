@@ -1,12 +1,12 @@
 \chapter{Ungenutzte Strukturen im Code}
-Im letzten Kapitel sollen einige Spezialfälle untersucht werden, bei denen oft aus verschiedenen Gründen auf ein Refactoring Verzichtet wird.
+Im letzten Kapitel sollen einige Spezialfälle untersucht werden, bei denen oft aus verschiedenen Gründen auf ein Refactoring verzichtet wird.
 Gründe dafür können unter anderem Zeitmangel, fehlende Erfahrung oder gar Faulheit der Entwickler sein.
 
 \section{Leerzeilen nutzen}
 Wenn im Code Leerzeilen verwendet werden, hat dies zumeist einen Grund. 
-Programmierende grenzen dadurch Gruppierungen von Aufrufen, Variablen oder generell zusammengehörigen Codeteilen voneinander ab.
+Programmierende grenzen dadurch Gruppierungen von Aufrufen, Variablen oder generell zusammengehörenden Codeteilen voneinander ab.
 Da Leerzeilen in kürzester Zeit eingefügt werden können und einen großen Effekt zur Lesbarkeit des Codes beitragen, werden diese fast immer benutzt.
-Dies ist auch ein Grund dafür, dass viele kleinere Refactorings nicht durchgeführt werden, da diese mehr Zeit in anspruch nehmen würden. \citep[S. 325]{fiveLines.2023}
+Dies ist auch ein Grund dafür, dass viele kleinere Refactorings nicht durchgeführt werden, da diese mehr Zeit in Anspruch nehmen würden. \citep[S. 325]{fiveLines.2023}
 \begin{figure}[ht]
     \centering
         \begin{minted}{typescript}
@@ -24,10 +24,10 @@ function login(username: string, password: string) {
     \label{fig:LoginLeerzeile}
 \end{figure}\\
 Das Codebeispiel \ref{fig:LoginLeerzeile} zeigt eine stark vereinfachte Methode, um einen Login durchzuführen.
-In Zeile Nr. 6 wird die Überprüfung der Anmeldedaten und die annschließende Anfrage des Nutzers, von den weiteren Bestandteilen des Logins räumlich voneinander getrennt.
+In Zeile Nr. 6 wird die Überprüfung der Anmeldedaten und die anschließende Anfrage des Nutzers, von den weiteren Bestandteilen des Logins räumlich voneinander getrennt.
 Das durchzuführende Refactoring wirkt in diesem Fall fast trivial.
 Die beiden Bestandteile vor und nach der Leerzeile können nach \citep[S. 325]{fiveLines.2023} in eigene Methoden gezogen werden.
-Jediglich passende Funktions Namen müssen gewählt werden.
+Es müssen nur noch passende Funktionsnamen gewählt werden.
 Das folgende Ergebnis \ref{fig:LoginErgebnis} entsteht dadurch.
 \begin{figure}[ht]
     \centering
@@ -53,7 +53,7 @@ function login(username: string, password: string) {
     \label{fig:LoginErgebnis}
 \end{figure}
 \newpage
-Eine weiterer Punkt, an dem oft auf Leerzeilen zurückgegriffen wird, ist das Erstellen von Klassen.
+Ein weiterer Punkt, an dem oft auf Leerzeilen zurückgegriffen wird, ist das Erstellen von Klassen.
 Dort werden oft zusammengehörende Felder gruppiert.
 Das folgende Codebeispiel \ref{fig:LeerzeileFelder} zeigt den Anfang einer Klasse für eine Nutzer Authentifizierung. 
 \begin{figure}[ht]
@@ -64,7 +64,6 @@ class Authentication{
     private password: string;
 
     private timestamp: Date;
-    //..
 }
         \end{minted}
     \caption{Authentication Klasse mit einer Leerzeile}
@@ -82,20 +81,20 @@ class UserCredentials{
 }
 
 class Authentication{
+    private userCredentials: UserCredentials;
     private timestamp: Date;
-    //..
 }
         \end{minted}
-    \caption{Loginmethode mit einer Leerzeile}
+    \caption{Nutzerinformationen in eigener Klasse}
     \label{fig:LeerzeileFelderErgebnis}
 \end{figure}\\
 \newpage
-\section{Doppelten Code zusammenführen}
+\section{Ähnlichen Code zusammenführen}
 Es gibt immer wieder Situationen, in den zwei Methoden oder Klassen nahezu identisch sind, es aber trotzdem einen kleinen Unterschied gibt.
 In solchen Fällen wird oft auf das Refactoring verzichtet, da der Aufwand zu groß erscheint oder die Entwickler im Programmierfluss keine einfache Lösung finden den Code zusammenzuführen.\citep[S. 326 f.]{fiveLines.2023}\\
-Das folgende Beispiel zeigt zwei Klassen, die jeweils einen Fromatierer umsetzen.
+Das folgende Beispiel zeigt zwei Klassen, die jeweils einen Formatierer umsetzen.
 \begin{figure}[ht]
-    \begin{subfigure}[t]{0.48\textwidth}
+    \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \begin{minipage}[t]{\linewidth}
             \begin{minted}[linenos=false]{typescript}
@@ -112,11 +111,11 @@ class XMLFormatter {
 }
             \end{minted}
         \end{minipage}
-        \caption{Klasse eines XML-Formattierers}
+        \caption{Klasse eines XML-Formatierers}
         \label{fig:XmlAnfang}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.48\textwidth}
+    \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \begin{minipage}[t]{\linewidth}
             \begin{minted}[linenos=false]{typescript}
@@ -134,20 +133,210 @@ class JSONFormatter {
 }
             \end{minted}
         \end{minipage}
-        \caption{Klasse eines JSON-Formattierers}
+        \caption{Klasse eines JSON-Formatierers}
         \label{fig:JsonAnfang}
     \end{subfigure}
-    \caption{Ähnliche Formattierer Klassen \citep[S. 327]{fiveLines.2023}}
+    \caption{Ähnliche Formatierer Klassen \citep[S. 327]{fiveLines.2023}}
     \label{fig:FormatterAnfang}
 \end{figure}\\
-Vergleicht man die beiden Klassen \ref{fig:XmlAnfang} und \ref{fig:JsonAnfang}, fällt auf dass diese nahezu identisch sind.
+Vergleicht man die beiden Klassen \ref{fig:XmlAnfang} und \ref{fig:JsonAnfang}, fällt auf, dass diese nahezu identisch sind.
 Ein Unterschied ist zum Einen die abweichende Formatierung jedes einzelnen Wertes.
 Bei XML wird der Wert in ein Tag eingebettet, bei JSON wird ein Objekt mit einem Schlüssel-Wert-Paar in geschweiften Klammern erstellt.
-Dieser Unterschied liese sich einfach vereinen lassen, da dort nur unterschiedliche Zeichenketten eingefügt werden müssen.
-Die ausschlaggebende Problematik stellt, in diesem Beispiel, das trennende Komma zwischen einzelnen Werten im JSON Format dar.
+Dieser Unterschied liese sich einfach vereinen, da dort nur unterschiedliche Zeichenketten eingefügt werden müssen.
+Die ausschlaggebende Problematik stellt das trennende Komma zwischen einzelnen Werten, im JSON Format, dar.
 Dies verhindert eine einfache Zusammenführung der beiden Klassen.
-Im folgenden wird ein möglicher Lösungsansatz gezeigt, solche Probleme trotzdem zu lösen.
-blabla
+Da das Refactoring aus mehreren kleinen, aber einfachen Schritten besteht, betrachten wir das in der nachfolgenden Abbildung \ref{fig:FormatterEnde} gezeigte Ergebnis.
 
+\begin{figure}[ht]
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+class XMLFormatter {
+    format(vals:string[]) {
+        return new Formatter(
+            new FormatSingle
+                ("<value>", "</value>"),
+            new None()).format(vals);
+    }
+}
+class JSONFormatter {
+    format(vals:string[]) {
+        return new Formatter(
+            new FormatSingle
+                ("{ value: '", "' }"),
+            new Comma()).format(vals);
+    }
+}
+class Formatter {
+    constructor(
+        private single: FormatSingle,
+        private sep: Seperator) { }
+    format(vals: string[]) {
+        let result = "";
+        for (let i=0; i < vals.length; i++) 
+        {
+            reuslt = 
+              this.sep.put(i,result);
+            result += 
+              this.single.format(vals[i]);
+        }
+        return result;
+    }
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Formattierer Klassen}
+        \label{fig:gleichGut1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{minipage}[t]{\linewidth}
+            \begin{minted}[linenos=false]{typescript}
+class FormatSingle {
+    constructor(
+        private before: string,
+        private after: string) { }
+    format(val: string) {
+        return `${prefix}${val}${after}`
+    }
+}
+
+class Seperator {
+    put(i: number, result: string): string;
+}
+class Comma implements Seperator {
+    put(i: number, result: string) {
+        if (i > 0) result += ",";
+        return result;
+    }
+}
+class None implements Seperator {
+    put(i: number, result: string) {
+        return result;
+    }
+}
+            \end{minted}
+        \end{minipage}
+        \caption{Seperator Klassen}
+        \label{fig:gleichGut2}
+    \end{subfigure}
+    \caption{Ergebnis der Formatierer nach Refactoring \citep[S. 329 f.]{fiveLines.2023}}
+    \label{fig:FormatterEnde}
+\end{figure}
+\newpage
+Bei der Betrachtung der Klasse \textit{Formatter} fällt auf, dass diese eine große Ähnlichkeit zu den beiden ursprünglichen Klassen aufweist.
+Der Unterschied besteht darin, dass im Konstruktor zwei weitere Klassen übergeben werden, die das Formatieren der einzelnen Werte und das Einfügen des trennenden Kommas übernehmen.\\
+Die erste Klasse \textit{FormatSingle} übernimmt die genereller Formatierung einer Eingabe. Sie kann mit zwei beliebigen Zeichenketten instanziiert werden, die jeweils vor und nach dem eigentlichen Wert eingefügt werden.\\
+Die Zweite, \textit{Seperator}, übernimmt das Einfügen eines trennenden Zeichens zwischen den einzelnen Werten. Bei der Klasse \textit{Comma} wird ein Komma eingefügt, wenn der Index größer als 0 ist. Die Klasse \textit{None} fügt kein Zeichen ein.\\
+Abschließend müssen noch die jeweiligen Klassen, \textit{XMLFormatter} und \textit{JSONFormatter}, mit den jeweils richtigen Werten instanziiert werden.\\
+
+Das Ergebnis dieses Refactorings ist eine deutlich verbesserte Struktur, die die Wartbarkeit und Erweiterbarkeit des Codes deutlich erhöht. Es können ohne Probleme weitere Implementierungen von Formatierern erstellt werden, die nach ähnlichen Mustern arbeiten. 
 \section{Gemeinsame Affixe nutzen}
+Ein weiteres eindeutiges Merkmal, für ein klares Refactoring, ist die Verwendung von gemeinsamen Affixen in Methoden- oder Klassennamen.
+Dies deutet darauf hin, dass diese Codeteile eine klare Zusammengehörigkeit haben und in eine gemeinsame Struktur gekapselt werden können.
+Laut der Regel \textbf{\textit{„Vermeide gemeinsame Affixe“}}, können alle Felder und Methoden mit gleichem Präfix oder Suffix in eine eigene Klasse oder ein eigenes Interface extrahiert werden.
+Das Affix wird dabei zum Namen der neu erstellten Struktur \citep[S. 201 ff.]{fiveLines.2023}.\\
+Das folgende Beispiel zeigt Code, bei dem sofort auffällt, dass diese Regel verletzt wird. 
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+interface Protocol {...}
+class StringProtocol implements Protocol {...}
+class JSONProtocol implements Protocol {...}
+class ProtobufProtocol implements Protocol {...}
+/// ...
+    let p = new StringProtocol();
+/// ...
+        \end{minted}
+    \caption{Codeausschnitt mit gemeinsamen Suffix \citep[S. 331]{fiveLines.2023}}
+    \label{fig:AffixeSchlecht}
+\end{figure}\\
+Wird der Code betrachtet, fällt auf, dass \textit{„Protocol“} in allen Klassennamen vorkommt.
+Der Grund warum Programmierende dieses Refactoring in diesem Fall nicht durchführen, wird klar, wenn das Ergebnis betrachtet wird.
+Entfernt man bei der Klasse \textit{StringProtocol} das Suffix, bleibt nur noch \textit{„String“} übrig.
+Dies steht in Konflikt mit einer Basisklasse der Programmiersprache \citep[S. 330 f.]{fiveLines.2023}.
+Um diese Codestelle trotzdem zu verbessern, kann das Refactoring in leicht abgeänderter Form durchgeführt werden.
+Wie im folgenden Codebeispiel \ref{fig:AffixeGut} gezeigt, kann das Problem mithilfe eines \textit{„Namespace“} gelöst werden.
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+namespace ptotocol {
+    export interface Protocol {...}
+    export class String implements Protocol {...}
+    export class JSON implements Protocol {...}
+    export class Protobuf implements Protocol {...}
+}
+
+/// ...
+    let p = new protocol.String();
+/// ...
+        \end{minted}
+    \caption{Codeausschnitt mit Namespace \citep[S. 331]{fiveLines.2023}}
+    \label{fig:AffixeGut}
+\end{figure}\\
+Dieser Ansatz ist zwar zielführend, trotzdem sollte hier von Fall zu Fall entschieden werden, ob es eine bessere Lösung gibt, dies zu lösen.
+Da \textit{„String“} eine häufig verwendete Klasse ist, erschwert das gezeigte Beispiel die Nutzbarkeit des Codes weiter und ist nicht sinnvoll.
 \section{Den Laufzeittyp bearbeiten}
+Das letzte Beispiel, das betrachtet werden soll, zeigt eine Situation bei der auf den Operator \textit{\textbf{„instanceof“}} zurückgegriffen wird, um abhängig davon verschiedene Aufrufe ausgeführt werden sollen.
+Die Unterscheidung wird mithilfe von \textit{\textbf{„if“}}-Abfragen durchgeführt. Laut Clausen sollten \textit{\textbf{„if“}}-Anweisungen in Kombination mit \textit{\textbf{„else“}} vermieden werden.
+Nur Fälle mit \textit{\textbf{„instanceof“}}, \textit{\textbf{„typeof“}} oder Casts werden als Ausnahme genannt. \citep[S. 332]{fiveLines.2023}\\
+Das folgende Beispiel \ref{fig:LaufzeitSchlecht} zeigt solch eine Situation.
+
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function foo(obj: any) {
+    if (obj instanceof A) {
+        obj.methodA();
+    } else if (obj instanceof B) {
+        obj.methodB();
+    }
+}
+class A {
+    methodA() { ... }
+}
+class B {
+    methodB() { ... }
+}
+        \end{minted}
+    \caption{\textit{if}-Anweisung mit \textit{instanceof} \citep[S. 331]{fiveLines.2023}}
+    \label{fig:LaufzeitSchlecht}
+\end{figure}
+In der Funktion \textit{foo} wird überprüft, ob das übergebene Objekt eine Instanz der Klasse \textit{A} oder \textit{B} ist.
+Abhängig vom Ergebnis werden dann ihre jeweiligen Methoden aufgerufen.
+Dieses Verhalten ist ein Paradebeispiel für die Nutzung eines Interfaces.\\
+\begin{singlespace}
+\textit{„Interfaces erlauben es uns, einer Variablen Objekte verschiedener Klassen zuzuweisen. Wenn wir dann eine Methode daran aufrufen, wird der Aufruf zur richtigen Klasse geleitet. Gleichzeitig ist das auch der Weg, wie wir Typenuntersuchungen zur Laufzeit vermeiden können.“} \citep[S. 332]{fiveLines.2023}\\
+\end{singlespace}
+\newpage
+Das folgende Beispiel \ref{fig:LaufzeitGut} zeigt, wie das Problem mit dem erklärten Ansatz gelöst werden kann.
+\begin{figure}[ht]
+    \centering
+        \begin{minted}{typescript}
+function foo(obj: Foo) {
+    obj.foo();
+}
+class A implements Foo {
+    foo() {
+        this.methodA();
+    }
+    methodA() { ... }
+}
+class B implements Foo {
+    foo() {
+        this.methodB();
+    }
+    methodB() { ... }
+}
+interface Foo {
+    foo(): void;
+}
+        \end{minted}
+    \caption{Refactoring mit Interface \citep[S. 332 f.]{fiveLines.2023}}
+    \label{fig:LaufzeitGut}
+\end{figure}\\
+Abschließend lässt sich sagen, dass Refactoring in den gezeigten Situationen oft zu einer besseren Codebasis führt. Auch wenn es im Moment des Programmierens nicht sinnvoll wirkt, sollte der kleine Mehraufwand in Kauf genommen werden.
+Es ist wichtig, dass Entwickler sich immer wieder bewusst machen, dass Code nicht nur für den Moment geschrieben wird, sondern auch in Zukunft noch wartbar und erweiterbar sein sollte.
+Müssen andere Entwickler im Nachgang den Code anpassen, nimmt dies mehr Zeit in Anspruch, als wenn der Code von Anfang an sauber strukturiert ist.
